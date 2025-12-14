@@ -1,0 +1,387 @@
+{
+  "name": "MAIL-NEWS",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "561632aa-e64b-4bdf-889b-c68e5b378d4e",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        -224,
+        192
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {},
+      "id": "29377ee2-7f6a-407c-837e-f4bcbcb365ce",
+      "name": "No Operation, do nothing",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "url": "https://finnhub.io/api/v1/company-news",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "symbol",
+              "value": "={{ $json.TICKER }}"
+            },
+            {
+              "name": "from",
+              "value": "={{ $now.toLocal().toISO().split('T')[0] }}"
+            },
+            {
+              "name": "to",
+              "value": "={{ $now.toLocal().toISO().split('T')[0] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "430305d4-03aa-45ae-889b-f3d83c1afc1e",
+      "name": "API_FINNHUB",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        224,
+        192
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Imipfb7R9XYJfjYz",
+          "name": "Finnhub"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * n8n Code node - Finnhub -> (sin Telegram) -> TOML completo\n * Título: (TICKER) - Daily Market News\n * Salida: TOML con [[news]] (sin límite)\n */\n\nconst LOCALE = 'es-AR';\nconst TZ = 'America/Argentina/Tucuman';\nconst MAX_SUMMARY = 280;\n\nconst OVERRIDE_SYMBOL = ''; // p.ej. 'NVDA' para forzar\n\n/** --- utilidades --- */\nfunction fmtDate(epochSec) {\n  if (!epochSec) return '';\n  const d = new Date(epochSec * 1000);\n  return d.toLocaleString(LOCALE, {\n    timeZone: TZ,\n    year: 'numeric', month: '2-digit', day: '2-digit',\n    hour: '2-digit', minute: '2-digit'\n  });\n}\nfunction collectNews() {\n  const items = $input.all();\n  if (items.length === 1 && Array.isArray(items[0].json)) return items[0].json;\n  return items.map(i => i.json);\n}\nfunction truncate(s = '', max = 200) {\n  const str = String(s).trim();\n  if (str.length <= max) return str;\n  return str.slice(0, max - 1).trimEnd() + '…';\n}\nfunction detectSymbol(newsArr) {\n  if (OVERRIDE_SYMBOL && OVERRIDE_SYMBOL.trim()) return OVERRIDE_SYMBOL.trim().toUpperCase();\n  const items = $input.all();\n  if (items.length === 1 && items[0].json && items[0].json.symbol) {\n    return String(items[0].json.symbol).trim().toUpperCase();\n  }\n  for (const n of newsArr) {\n    if (n && typeof n.related === 'string' && n.related.trim()) {\n      const first = n.related.split(',').map(s => s.trim()).filter(Boolean)[0];\n      if (first) return first.toUpperCase();\n    }\n  }\n  return 'MARKET';\n}\n/** Escapar como cadena TOML usando JSON.stringify (válido para TOML basic strings) */\nfunction q(value = '') {\n  return JSON.stringify(String(value));\n}\n\n/** --- limpieza & unicidad --- */\nconst raw = collectNews() || [];\nconst cleaned = raw\n  .filter(n => n && (n.headline || n.summary || n.url))\n  .sort((a, b) => (b.datetime || 0) - (a.datetime || 0));\n\nconst seen = new Set();\nconst byTitle = new Set();\nconst unique = [];\nfor (const n of cleaned) {\n  const key = n.id ?? `${(n.headline || '').toLowerCase()}`;\n  if (seen.has(key)) continue;\n  if (n.headline && byTitle.has(n.headline.toLowerCase())) continue;\n  seen.add(key);\n  if (n.headline) byTitle.add(n.headline.toLowerCase());\n  unique.push(n);\n}\n\n/** --- armado TOML --- */\nconst SYMBOL = detectSymbol(unique);\nconst headerRaw = `(${SYMBOL}) - Daily Market News`;\n\nfunction buildToml() {\n  const now = new Date();\n  const nowStr = now.toLocaleString(LOCALE, { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });\n\n  const lines = [];\n  lines.push(`title = ${q(headerRaw)}`);\n  lines.push(`symbol = ${q(SYMBOL)}`);\n  lines.push(`generated_at = ${q(nowStr)}`);\n  lines.push('');\n\n  if (!unique.length) {\n    lines.push('[[news]]');\n    lines.push(`index = 1`);\n    lines.push(`headline = ${q('(Sin noticias)')}`);\n    lines.push(`summary = ${q('No hay noticias para mostrar en este momento.')}`);\n    return lines.join('\\n');\n  }\n\n  unique.forEach((n, idx) => {\n    const title = n.headline || '(Sin titular)';\n    const dateStr = fmtDate(n.datetime);\n    const src = n.source || '';\n    const sum = truncate(n.summary || '', MAX_SUMMARY);\n    const url = n.url || '';\n\n    lines.push('[[news]]');\n    lines.push(`index = ${idx + 1}`);\n    lines.push(`headline = ${q(title)}`);\n    if (src) lines.push(`source = ${q(src)}`);\n    if (dateStr) lines.push(`datetime = ${q(dateStr)}`);\n    if (sum) lines.push(`summary = ${q(sum)}`);\n    if (url) lines.push(`url = ${q(url)}`);\n    lines.push('');\n  });\n\n  return lines.join('\\n').trim() + '\\n';\n}\n\nconst toml = buildToml();\n\n/** === FIX: obtener USER del Sheets sin pairing ===\n * Buscamos en todas las filas de \"Get row(s) in sheet)\" la que coincide con ACTION === SYMBOL\n * Si no hay match, tomamos la primera como fallback.\n */\nconst rows = $items('FAVORITOS'); // todas las filas originales\nconst match = rows.find(r => String(r.json.ACTION || '').toUpperCase() === SYMBOL);\nconst user = (match?.json?.USER ?? rows?.[0]?.json?.USER ?? '').toString().trim();\n\n/** Devolvemos el TOML. Mantengo 'text' por compatibilidad con flujos existentes. */\nreturn [{\n  json: { text: toml, toml, chatId: user },\n  pairedItem: { item: 0 }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        192
+      ],
+      "id": "3ebbb5b8-2be8-412c-9a04-75aca79e8ec4",
+      "name": "JSON to TOML"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "options": {
+          "systemMessage": "=La salida tiene que ser formato html para mandar por mail.\nAdemas de mostrar toda la información quiero que me generes un resumen de todas las noticias en la parte superior para que el lector sepa como están las acciones el día de hoy {{$now.format('yyyy-MM-dd')}}.\nLa salida no debe tener la etiqueta ```html. Directamente el codigo html para mandar el mail."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        672,
+        192
+      ],
+      "id": "35e1aecf-f26c-4012-ab07-21244bf7aad5",
+      "name": "AGENTE_MAIL"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('DATOS').item.json.mail }}",
+        "subject": "=Noticias de  {{ $('DATOS').item.json.TICKER }} del dia: {{ $now.format('dd-MM-yy') }}",
+        "message": "={{ $json.output }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1024,
+        192
+      ],
+      "id": "4f3eb88b-335b-425a-87e9-187497692967",
+      "name": "MANDAR_MAIL",
+      "webhookId": "b21eb8f3-f5a7-4ba6-a2bf-9ea499f6a7cf",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "R5SaFPTFffu00X0G",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5c99dbd7-90f5-4db7-9158-bf3fa7125efa",
+              "name": "id_user",
+              "value": "={{ $json.id_telegram }}",
+              "type": "number"
+            },
+            {
+              "id": "4ef5d97b-4635-41b1-afcd-609aa07d9ad8",
+              "name": "TICKER",
+              "value": "={{ $json.ticket }}",
+              "type": "string"
+            },
+            {
+              "id": "5d9fece5-d049-4400-8d88-4aa817ca39ab",
+              "name": "mail",
+              "value": "={{ $json.mail }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        192
+      ],
+      "id": "4d2043fe-f04a-4f4c-98ea-059674371a89",
+      "name": "DATOS"
+    },
+    {
+      "parameters": {},
+      "id": "097c1e46-e4ad-426a-a6e7-5e6c437e3a8c",
+      "name": "ESPERA_5",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        1248,
+        320
+      ],
+      "webhookId": "6c990829-24a2-4dfd-a689-4bdbd37a8bd3",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Cuxk-TiYjY9piJqZTsVxVnVoKsSkpIkiSdLFhpjZeUc",
+          "mode": "list",
+          "cachedResultName": "Favoritos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Cuxk-TiYjY9piJqZTsVxVnVoKsSkpIkiSdLFhpjZeUc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Cuxk-TiYjY9piJqZTsVxVnVoKsSkpIkiSdLFhpjZeUc/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "active",
+              "lookupValue": "SI"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -448,
+        192
+      ],
+      "id": "12883cdb-cb74-4fd9-b491-407aad018592",
+      "name": "FAVORITOS",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "15 9 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "e5728de7-0af5-4d1d-ac32-527172032275",
+      "name": "TRIGGER_1D",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -672,
+        192
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        752,
+        416
+      ],
+      "id": "3caadd17-7bab-40fe-a1ee-b3224e1489ca",
+      "name": "4.1_MINI",
+      "credentials": {
+        "openAiApi": {
+          "id": "BmaFty9xMUmDAFih",
+          "name": "OpenAi Ocaranza"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "DATOS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API_FINNHUB": {
+      "main": [
+        [
+          {
+            "node": "JSON to TOML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JSON to TOML": {
+      "main": [
+        [
+          {
+            "node": "AGENTE_MAIL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENTE_MAIL": {
+      "main": [
+        [
+          {
+            "node": "MANDAR_MAIL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MANDAR_MAIL": {
+      "main": [
+        [
+          {
+            "node": "ESPERA_5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DATOS": {
+      "main": [
+        [
+          {
+            "node": "API_FINNHUB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ESPERA_5": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FAVORITOS": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TRIGGER_1D": {
+      "main": [
+        [
+          {
+            "node": "FAVORITOS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4.1_MINI": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AGENTE_MAIL",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8c738b03-7a40-496e-9176-e15872658a7f",
+  "meta": {
+    "instanceId": "99dea714450516e2019d8d8452140777f1b74fce288de8785b7c104e37169184"
+  },
+  "id": "NzKZmOXog7yTGwpE",
+  "tags": []
+}

@@ -1,0 +1,1614 @@
+{
+  "name": "CAHTBOT",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1Cuxk-TiYjY9piJqZTsVxVnVoKsSkpIkiSdLFhpjZeUc",
+          "mode": "list",
+          "cachedResultName": "Favoritos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Cuxk-TiYjY9piJqZTsVxVnVoKsSkpIkiSdLFhpjZeUc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Cuxk-TiYjY9piJqZTsVxVnVoKsSkpIkiSdLFhpjZeUc/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_telegram": "={{ $('Telegram Trigger1').item.json.message.from.id }}",
+            "ticket": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('ticket', `Ticket de la empresa/acción. `, 'string') }}",
+            "active": "SI",
+            "mail": "={{ $('Usuario?').item.json.nombre_usuario }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_telegram",
+              "displayName": "id_telegram",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "mail",
+              "displayName": "mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ticket",
+              "displayName": "ticket",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "active",
+              "displayName": "active",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -2816,
+        1376
+      ],
+      "id": "f0f8bd56-010e-4cfc-ac9e-01c235f6e62d",
+      "name": "Agregar",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -4384,
+        528
+      ],
+      "id": "eb227f6a-4ff0-4254-9801-f2a986f0313b",
+      "name": "Telegram Trigger1",
+      "webhookId": "4037e92c-6a6a-46d8-a917-140a43db5ac9",
+      "credentials": {
+        "telegramApi": {
+          "id": "1RjJxHfCbfVBmEMh",
+          "name": "IA Dis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Cuxk-TiYjY9piJqZTsVxVnVoKsSkpIkiSdLFhpjZeUc",
+          "mode": "list",
+          "cachedResultName": "Favoritos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Cuxk-TiYjY9piJqZTsVxVnVoKsSkpIkiSdLFhpjZeUc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Cuxk-TiYjY9piJqZTsVxVnVoKsSkpIkiSdLFhpjZeUc/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "id_telegram",
+              "lookupValue": "={{ $('Telegram Trigger1').item.json.message.from.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -2560,
+        1376
+      ],
+      "id": "dcd45157-4913-4550-b5e3-5257cea94e13",
+      "name": "Listar",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "id": "aaa6cdfa-e70a-478c-8e21-1bda9c941a4e",
+      "name": "OpenAI Chat Model3",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        -3360,
+        1168
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "BmaFty9xMUmDAFih",
+          "name": "OpenAi Ocaranza"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "id": "127ad72f-7a47-45c2-9e8a-da047ba4f2af",
+      "name": "OpenAI Chat Model4",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        -2944,
+        1376
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "BmaFty9xMUmDAFih",
+          "name": "OpenAi Ocaranza"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "={{ $('Telegram Trigger1').item.json.message.text }}",
+        "options": {
+          "systemMessage": "Usa las herramientas de eliminar, listar o agregar una nueva acción. Guarda el token, no el nombre de la acción/empresa."
+        }
+      },
+      "id": "3c74fa27-bb37-48af-a373-2abc94eb0ac8",
+      "name": "Lista Favoritos",
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "position": [
+        -3232,
+        1168
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Telegram Trigger1').item.json.message.text }}",
+        "options": {
+          "systemMessage": "=Eres el Orquestador Central de un sistema de gestión de inversiones automatizado. Utiliza siempre los agentes disponibles.\nTus agentes disponibles y sus responsabilidades son:\n\n1. AGENTE_GENERAL\n   - Tareas: Listar, agregar o eliminar acciones de la lista de seguimiento (watchlist).\n   - Palabras clave: \"ver lista\", \"agregar [ticker]\", \"sacar [ticker]\", \"monitorear\".\n\n2. AGENTE_COMPRAVENTA\n   - Tareas: Ejecutar órdenes de compra o venta en el mercado.\n   - Requiere: Acción (Ticker) y Cantidad/Monto.\n   - Palabras clave: \"comprar\", \"vender\", \"invertir\".\n\n3. AGENTE_BUSCAPRECIO\n   - Tareas: Buscar cotización actual o información de mercado de un activo.\n   - Palabras clave: \"precio de\", \"cuánto está\", \"cotización\", \"info de\".\n\n4. Portfolio\n  - Ver el portfolio de acciones.\n\n5. Transacciones\n  - Ver las transacciones realizadas.\n\n6. Cuenta\n  - Saldo de la cuenta.\n\n7. Ordenes\n  - Ver ordenes pendientes.\n\n2. ACOMPRAVENTA\nCuando el usuario quiera realizar una orden de COMPRA o VENTA, DEBE enviar la información usando el siguiente formato de texto estructurado.\n\nEl mensaje debe cumplir estas reglas:\n- \"tipo\" solo puede ser BUY o SELL.\n- \"tipo orden\" solo puede ser LIMIT o MARKET.\n- Si \"tipo orden\" es MARKET, el campo \"precio\" DEBE ser null.\n- Si no se conoce algún campo, debe enviarse como null.\n\nEJEMPLO DE FORMATO DE ORDEN:\n\n\"ticket\": \"IBM\",\n\"tipo\": \"BUY\",\n\"tipo orden\": \"LIMIT\",\n\"precio\": 200,\n\"cantidad\": 20\n\n\nORDER FORMAT EXAMPLE:\n\n\"ticket\": \"IBM\",\n\"tipo\": \"BUY\",\n\"tipo ornden\": \"LIMIT\",\n\"precio\": 200,\n\"cantidad\": 20\n\n\n### FORMATO DE SALIDA\n\nDebes devolver lo que te responden los subagentes para mandar el mensaje por telegram. En formato de texto bonito con emojis.\n"
+        }
+      },
+      "id": "e61e0c58-de54-428f-aca5-f2d7193a6532",
+      "name": "Agente",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -3056,
+        944
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "url": "https://www.alphavantage.co/query",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "function",
+              "value": "GLOBAL_QUOTE"
+            },
+            {
+              "name": "symbol",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `ticket por el que pregunta el usuario\nEjemplo: APPL (que representa apple)`, 'string') }}"
+            },
+            {
+              "name": "apikey",
+              "value": "W7G2LEF7A9Y97DQ8"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        -2944,
+        1168
+      ],
+      "id": "51a29182-de96-43a9-8fe7-7306305ae6d9",
+      "name": "Precio"
+    },
+    {
+      "parameters": {
+        "text": "=Quiero ver todo mi portfolio.",
+        "options": {
+          "systemMessage": "Usa siempre la herramienta de portfolio para ver el portfolio completo del usuario.\nLimitate a responder solo el ticket y cantidad.\nEjemplo: \n- Ticker: NVDA\n- Cantidad Total: 2"
+        }
+      },
+      "id": "f5d48126-5128-46e5-8c9d-e8418a401c4a",
+      "name": "Portfolio",
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "position": [
+        -2816,
+        1168
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys",
+          "mode": "list",
+          "cachedResultName": "Portfolio",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 321740412,
+          "mode": "list",
+          "cachedResultName": "Portfolio",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys/edit#gid=321740412"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "user_telegram_id",
+              "lookupValue": "={{ $('Telegram Trigger1').item.json.message.from.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -2352,
+        1376
+      ],
+      "id": "6d65a49f-48cc-42ac-af81-5a7c649b9f17",
+      "name": "portfolio",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "15WjZ5f7lV5i9SgwAGDIvIqkDUjEZ_jjYbbAdywtf7Nk",
+          "mode": "list",
+          "cachedResultName": "Transacciones",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15WjZ5f7lV5i9SgwAGDIvIqkDUjEZ_jjYbbAdywtf7Nk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 768739631,
+          "mode": "list",
+          "cachedResultName": "Transacciones",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15WjZ5f7lV5i9SgwAGDIvIqkDUjEZ_jjYbbAdywtf7Nk/edit#gid=768739631"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "user_telegram_id",
+              "lookupValue": "={{ $('Telegram Trigger1').item.json.message.from.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -2144,
+        1376
+      ],
+      "id": "0c37b27b-4115-460b-826f-013424ed0539",
+      "name": "transaccion",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "Usa siempre la herramienta de transaccion para ver el historial de transacciones."
+        }
+      },
+      "id": "18f1648c-86c4-4d90-b213-b9b7e61e2054",
+      "name": "Transaccion",
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "position": [
+        -2528,
+        1168
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "id": "9511f87c-c7e7-498c-9fc3-46472eb788d0",
+      "name": "OpenAI Chat Model5",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        -3648,
+        944
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "BmaFty9xMUmDAFih",
+          "name": "OpenAi Ocaranza"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "id": "955bfa5d-f766-4fc0-969f-cc9bc415325e",
+      "name": "OpenAI Chat Model6",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        -2560,
+        656
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "BmaFty9xMUmDAFih",
+          "name": "OpenAi Ocaranza"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "Usa la herramienta usuario para saber información de la cuenta. Lo mas importante es el dinero de la cuenta."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        -2224,
+        1168
+      ],
+      "id": "f352fbcf-4b05-4368-912e-4aaa070fa9e2",
+      "name": "Cuenta"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4",
+          "mode": "list",
+          "cachedResultName": "Usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1727394368,
+          "mode": "list",
+          "cachedResultName": "Usuario",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit#gid=1727394368"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "user_telegram_id",
+              "lookupValue": "={{ $('Telegram Trigger1').item.json.message.from.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -1952,
+        1376
+      ],
+      "id": "79965f0d-df38-47a9-a3f3-7d244006dec5",
+      "name": "usuarios",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY",
+          "mode": "list",
+          "cachedResultName": "Ordenes_Programadas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 177537877,
+          "mode": "list",
+          "cachedResultName": "Ordenes_Programadas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY/edit#gid=177537877"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "user_telegram_id",
+              "lookupValue": "={{ $('Telegram Trigger1').item.json.message.from.id }}"
+            },
+            {
+              "lookupColumn": "estado",
+              "lookupValue": "PENDIENTE"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -1824,
+        1376
+      ],
+      "id": "231b7388-946c-484a-b0f6-70fe5463220c",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "Usa la herramienta ordenes para saber información de las ordenes que tengo."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1904,
+        1168
+      ],
+      "id": "7e7f679f-0d8f-4af1-8143-7482c35541a0",
+      "name": "Ordenes"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY",
+          "mode": "list",
+          "cachedResultName": "Ordenes_Programadas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 177537877,
+          "mode": "list",
+          "cachedResultName": "Ordenes_Programadas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY/edit#gid=177537877"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_orden": "={{ [...Array(36)].map((_, i) => \n  'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'[i].replace(/[xy]/, c => {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  })\n).join('') }}\n",
+            "user_telegram_id": "={{ $('Telegram Trigger1').item.json.message.from.id }}",
+            "ticker": "={{ $json.output.ticket }}",
+            "tipo_orden": "={{ $json.output.type_order }}",
+            "cantidad": "={{ $json.output.quantity }}",
+            "estado": "PENDIENTE",
+            "fecha_creacion": "={{ $now }}",
+            "orden": "={{ $json.output.type }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_orden",
+              "displayName": "id_orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "user_telegram_id",
+              "displayName": "user_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ticker",
+              "displayName": "ticker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "orden",
+              "displayName": "orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "tipo_orden",
+              "displayName": "tipo_orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "precio_objetivo",
+              "displayName": "precio_objetivo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "cantidad",
+              "displayName": "cantidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "precio_operacion",
+              "displayName": "precio_operacion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_creacion",
+              "displayName": "fecha_creacion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_ejecucion",
+              "displayName": "fecha_ejecucion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1312,
+        336
+      ],
+      "id": "5b0ce5ed-9677-49da-87df-5b1745c5b005",
+      "name": "Crear_Orden",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "433d9a5c-1b6e-4183-b73b-c80509d276cc",
+              "leftValue": "={{ $json.output.type_order }}",
+              "rightValue": "MARKET",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1536,
+        432
+      ],
+      "id": "cb2cfef7-df83-4795-aef6-3578cc78d4b2",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY",
+          "mode": "list",
+          "cachedResultName": "Ordenes_Programadas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 177537877,
+          "mode": "list",
+          "cachedResultName": "Ordenes_Programadas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY/edit#gid=177537877"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_orden": "={{ [...Array(36)].map((_, i) => \n  'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'[i].replace(/[xy]/, c => {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  })\n).join('') }}\n",
+            "user_telegram_id": "={{ $('Telegram Trigger1').item.json.message.from.id }}",
+            "ticker": "={{ $json.output.ticket }}",
+            "tipo_orden": "={{ $json.output.type_order }}",
+            "precio_objetivo": "={{ $json.output.price }}",
+            "cantidad": "={{ $json.output.quantity }}",
+            "estado": "PENDIENTE",
+            "fecha_creacion": "={{ $now }}",
+            "orden": "={{ $json.output.type }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_orden",
+              "displayName": "id_orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "user_telegram_id",
+              "displayName": "user_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ticker",
+              "displayName": "ticker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "orden",
+              "displayName": "orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "tipo_orden",
+              "displayName": "tipo_orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "precio_objetivo",
+              "displayName": "precio_objetivo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "cantidad",
+              "displayName": "cantidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "precio_operacion",
+              "displayName": "precio_operacion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_creacion",
+              "displayName": "fecha_creacion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_ejecucion",
+              "displayName": "fecha_ejecucion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1312,
+        528
+      ],
+      "id": "2c9e08bc-c406-49e2-999f-b2abb894550c",
+      "name": "Crear_Orden1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4",
+          "mode": "list",
+          "cachedResultName": "Usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1727394368,
+          "mode": "list",
+          "cachedResultName": "Usuario",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit#gid=1727394368"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "user_telegram_id",
+              "lookupValue": "={{ $('Telegram Trigger1').item.json.message.from.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4160,
+        528
+      ],
+      "id": "345e55fa-1503-4e26-8790-f488105b3f06",
+      "name": "Usuario?",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6168893c-bbe0-4c26-b964-f96836db4741",
+              "leftValue": "={{ $json.user_telegram_id.toString() }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -3936,
+        528
+      ],
+      "id": "440073d5-8f37-4801-9b0b-ae6d5cd3501b",
+      "name": "Existe_usuario?"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "chatId": "={{ $('Telegram Trigger1').item.json.message.from.id }}",
+        "message": "Registrarse",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "placeholder": "example@email.com",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "messageButtonLabel": "Haga click acá.",
+          "responseFormTitle": "Registro",
+          "responseFormButtonLabel": "Enviar",
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 5,
+              "resumeUnit": "minutes"
+            }
+          },
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -3648,
+        128
+      ],
+      "id": "98f16fcb-f29b-48a7-a2e4-6eb5b3c0f6f6",
+      "name": "Formulario_usuario",
+      "webhookId": "42f522b7-857b-4ee3-b757-ff8750aee51e",
+      "credentials": {
+        "telegramApi": {
+          "id": "1RjJxHfCbfVBmEMh",
+          "name": "IA Dis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4",
+          "mode": "list",
+          "cachedResultName": "Usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1727394368,
+          "mode": "list",
+          "cachedResultName": "Usuario",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit#gid=1727394368"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "nombre_usuario": "={{ $json.data.Email }}",
+            "user_telegram_id": "={{ $('Telegram Trigger1').item.json.message.from.id }}",
+            "fecha_registro": "={{ $now }}",
+            "saldo_disponible": "0",
+            "estado": "activo"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "user_telegram_id",
+              "displayName": "user_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "nombre_usuario",
+              "displayName": "nombre_usuario",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "saldo_disponible",
+              "displayName": "saldo_disponible",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_registro",
+              "displayName": "fecha_registro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2560,
+        128
+      ],
+      "id": "ebe00f5b-d09d-4c50-93b0-9179113c16cf",
+      "name": "Crear_usuario",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger1').item.json.message.from.id }}",
+        "text": "✅ Usuario registrado con éxito.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1536,
+        128
+      ],
+      "id": "9b242bc1-25b0-4789-a6ab-d64de267b57e",
+      "name": "Usuario_creado",
+      "webhookId": "da9ef3be-c6b0-4537-a2cb-e3c694af6cac",
+      "credentials": {
+        "telegramApi": {
+          "id": "1RjJxHfCbfVBmEMh",
+          "name": "IA Dis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger1').item.json.message.from.id }}",
+        "text": "=Orden ejecutada con éxito para:\n{{ $('JSON_Operacion').item.json.output.ticket }}\n{{ $('JSON_Operacion').item.json.output.type }}\nCantidad: {{ $('JSON_Operacion').item.json.output.quantity }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1088,
+        336
+      ],
+      "id": "f426b8c2-60d0-44e7-8662-5f9c62b88403",
+      "name": "Operacion",
+      "webhookId": "703ab239-74e9-462f-bb8e-b49325a6637b",
+      "credentials": {
+        "telegramApi": {
+          "id": "1RjJxHfCbfVBmEMh",
+          "name": "IA Dis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger1').item.json.message.from.id }}",
+        "text": "=Orden ejecutada con éxito para:\n{{ $('JSON_Operacion').item.json.output.ticket }}\n{{ $('JSON_Operacion').item.json.output.type }}\n{{ $('JSON_Operacion').item.json.output.type_order }}: {{ $('JSON_Operacion').item.json.output.price }}\nCantidad: {{ $('JSON_Operacion').item.json.output.quantity }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1088,
+        528
+      ],
+      "id": "1a069e0c-6952-469a-a8db-e1ef20938200",
+      "name": "Operacion1",
+      "webhookId": "703ab239-74e9-462f-bb8e-b49325a6637b",
+      "credentials": {
+        "telegramApi": {
+          "id": "1RjJxHfCbfVBmEMh",
+          "name": "IA Dis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "={{ $('Telegram Trigger1').item.json.message.text.toUpperCase() }}",
+        "schemaType": "fromJson",
+        "jsonSchemaExample": "{\n\t\"ticket\": \"AAPL\",\n    \"type\": \"BUY\",\n    \"type_order\": \"LIMIT\",\n\t\"price\": 123,\n    \"quantity\": 123\n}",
+        "options": {
+          "systemPromptTemplate": "=You are an expert financial extraction algorithm.\n\nYour task is to extract structured trading information from unstructured text and return it as a JSON object.\n\nRULES:\n- Extract only explicitly stated information.\n- If an attribute is missing or unknown, return null.\n- All string values MUST be in UPPERCASE.\n- The output MUST be valid JSON and nothing else.\n\nFIELD CONSTRAINTS:\n- \"ticket\": string | null\n- \"type\": only \"BUY\" or \"SELL\"\n- \"type_order\": only \"LIMIT\" or \"MARKET\"\n- \"price\": number | null\n- \"quantity\": number | null\n\nLOGIC RULES:\n- If \"type_order\" is \"MARKET\", then \"price\" MUST be null.\n- If \"type_order\" is \"LIMIT\", \"price\" MUST be a number.\n\nOUTPUT FORMAT (JSON ONLY):\n\nEXAMPLE 1:\n  \"ticket\": \"APPL\",\n  \"type\": \"BUY\",\n  \"type_order\": \"MARKET\",\n  \"price\": null,\n  \"quantity\": 3\n\n\nEXAMPLE 2:\n  \"ticket\": \"APPL\",\n  \"type\": \"SELL\",\n  \"type_order\": \"LIMIT\",\n  \"price\": 200,\n  \"quantity\": 5\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        -2624,
+        432
+      ],
+      "id": "bccaa6d5-5f4e-481e-be22-23ccc39d3541",
+      "name": "JSON_Operacion"
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $('Telegram Trigger1').item.json.message.text }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "Compra o venta",
+              "description": "=Unicamente si el usuario rellena el siguiente formulario:\nEjemplo:\n\"ticket\": \"IBM\",\n\"type\": \"BUY\",\n\"type_order\": \"LIMIT\",\n\"price\": 200,\n\"quantity\": 20\nExcluir quiero comprar, quiero vender."
+            },
+            {
+              "category": "General",
+              "description": "=Consultas, preguntas, saludos,. despidos, estado cuenta, transacciones, portfolio. Preguntas como compra o venta. Como compro, el formato, como vendo."
+            }
+          ]
+        },
+        "options": {
+          "fallback": "other"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        -3712,
+        688
+      ],
+      "id": "d3a85ba5-2de5-4070-8394-2525498cbb20",
+      "name": "Clasificador de entrada"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger1').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -1536,
+        944
+      ],
+      "id": "6ffea764-5180-44cd-9284-25faa3835af4",
+      "name": "Salida",
+      "webhookId": "e9f4ed29-eeae-45dd-8d22-e2fd5e1c0403",
+      "credentials": {
+        "telegramApi": {
+          "id": "1RjJxHfCbfVBmEMh",
+          "name": "IA Dis"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Agregar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Lista Favoritos",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Usuario?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Lista Favoritos",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Lista Favoritos",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Portfolio",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Transaccion",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Cuenta",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Ordenes",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lista Favoritos": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente": {
+      "main": [
+        [
+          {
+            "node": "Salida",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Precio": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Portfolio": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "portfolio": {
+      "ai_tool": [
+        [
+          {
+            "node": "Portfolio",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "transaccion": {
+      "ai_tool": [
+        [
+          {
+            "node": "Transaccion",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transaccion": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Clasificador de entrada",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "JSON_Operacion",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cuenta": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "usuarios": {
+      "ai_tool": [
+        [
+          {
+            "node": "Cuenta",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "Ordenes",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ordenes": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear_Orden": {
+      "main": [
+        [
+          {
+            "node": "Operacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Crear_Orden",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Crear_Orden1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear_Orden1": {
+      "main": [
+        [
+          {
+            "node": "Operacion1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Usuario?": {
+      "main": [
+        [
+          {
+            "node": "Existe_usuario?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Existe_usuario?": {
+      "main": [
+        [
+          {
+            "node": "Clasificador de entrada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Formulario_usuario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formulario_usuario": {
+      "main": [
+        [
+          {
+            "node": "Crear_usuario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear_usuario": {
+      "main": [
+        [
+          {
+            "node": "Usuario_creado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JSON_Operacion": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clasificador de entrada": {
+      "main": [
+        [
+          {
+            "node": "JSON_Operacion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "timezone": "America/Argentina/Buenos_Aires",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "15e478ef-e27f-4cef-9d93-7b1b02d85fbd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "99dea714450516e2019d8d8452140777f1b74fce288de8785b7c104e37169184"
+  },
+  "id": "XwJgKLt4jjnOTHrY",
+  "tags": []
+}
