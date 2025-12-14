@@ -1,0 +1,2514 @@
+{
+  "name": "OPERATION",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bd2fc8f7-0f07-43f3-8581-3ffc3b2c6ded",
+              "name": "row_number",
+              "value": "={{ $json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "cdf88bf0-6c24-4a0d-b6a5-6fef5b7a701f",
+              "name": "user_telegram_id",
+              "value": "={{ $json.user_telegram_id }}",
+              "type": "number"
+            },
+            {
+              "id": "4ba153f7-e471-4b59-acb7-f38e4430d663",
+              "name": "ticker",
+              "value": "={{ $json.ticker }}",
+              "type": "string"
+            },
+            {
+              "id": "d66dd3e6-b922-4797-8e74-dc585be6f050",
+              "name": "orden",
+              "value": "={{ $json.orden }}",
+              "type": "string"
+            },
+            {
+              "id": "79114e82-648b-4ab3-9b63-a86a467860da",
+              "name": "tipo_orden",
+              "value": "={{ $json.tipo_orden }}",
+              "type": "string"
+            },
+            {
+              "id": "8a437e46-d0e9-4280-bd39-1596fad7311f",
+              "name": "precio_objetivo",
+              "value": "={{ $json.precio_objetivo }}",
+              "type": "number"
+            },
+            {
+              "id": "ba240dfb-bdb8-48d1-ae31-5e6550de45cc",
+              "name": "cantidad",
+              "value": "={{ $json.cantidad }}",
+              "type": "number"
+            },
+            {
+              "id": "d9ea9c31-f421-4b61-8b6a-47445cb7cf1a",
+              "name": "estado",
+              "value": "={{ $json.estado }}",
+              "type": "string"
+            },
+            {
+              "id": "af195935-571f-4022-8f10-741072974ebc",
+              "name": "id_orden",
+              "value": "={{ $json.id_orden }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -8064,
+        1408
+      ],
+      "id": "6cd755ed-b783-4615-8c69-9faf9856e410",
+      "name": "Variables_Orden"
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -7840,
+        1408
+      ],
+      "id": "1c85a447-11fb-4597-a2f2-db5d38fc6422",
+      "name": "Espera_3s",
+      "webhookId": "1236ac32-8cad-4439-9fb6-e94654bd49e8"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -8736,
+        1936
+      ],
+      "id": "eb12266e-a2eb-4865-adb6-7e7a456d1f0e",
+      "name": "Trigger_1m"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -8288,
+        1936
+      ],
+      "id": "139b8b33-9b9a-4233-8c0d-1af99f73d750",
+      "name": "Loop_Over_Ordenes"
+    },
+    {
+      "parameters": {
+        "url": "https://www.alphavantage.co/query",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "function",
+              "value": "GLOBAL_QUOTE"
+            },
+            {
+              "name": "symbol",
+              "value": "={{ $('Variables_Orden').item.json.ticker }}"
+            },
+            {
+              "name": "apikey",
+              "value": "W7G2LEF7A9Y97DQ8"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -7616,
+        1408
+      ],
+      "id": "0097494d-b16e-4f26-8b61-1c62b086aafa",
+      "name": "API_alphavantage"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c224168-b34d-43f1-bd60-7b0283ca857e",
+              "name": "compra",
+              "value": "compra",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -6272,
+        1024
+      ],
+      "id": "cf589131-8d81-4e41-8a96-0615514589b1",
+      "name": "BUY_MARKET"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "30ea5e60-5200-49fe-bf18-37990b9e8bf0",
+              "name": "venta",
+              "value": "venta",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -6496,
+        1600
+      ],
+      "id": "a2afa8a8-016c-4657-bf60-e9c0d72f4d14",
+      "name": "SELL_LIMIT"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "413931df-9536-4746-9af6-c82d5585f166",
+              "name": "compra",
+              "value": "compra",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -6496,
+        1408
+      ],
+      "id": "8a6dfa9d-c1e0-4074-b707-0eb42c2dcbd5",
+      "name": "BUY_LIMIT"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c224168-b34d-43f1-bd60-7b0283ca857e",
+              "name": "venta",
+              "value": "venta",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -6272,
+        1216
+      ],
+      "id": "f88b4c3c-b5f9-4d0b-a6ce-51480f314ac4",
+      "name": "SELL_MARKET"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Variables_Orden').item.json.user_telegram_id }}",
+        "text": "=Error al hacer la operacion de  {{ $('Variables_Orden').item.json.ticker }} {{ $('Variables_Orden').item.json.orden }} {{ $('Variables_Orden').item.json.tipo_orden }} {{ $('Variables_Orden').item.json.precio_objetivo }} {{ $('Variables_Orden').item.json.cantidad }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -6496,
+        1792
+      ],
+      "id": "755dd22a-c77a-4408-8731-515dc0e068fe",
+      "name": "Send a text message2",
+      "webhookId": "c0d27168-35c7-4e1e-abd7-0ef8a71b5283",
+      "credentials": {
+        "telegramApi": {
+          "id": "1RjJxHfCbfVBmEMh",
+          "name": "IA Dis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY",
+          "mode": "list",
+          "cachedResultName": "Ordenes_Programadas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 177537877,
+          "mode": "list",
+          "cachedResultName": "Ordenes_Programadas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY/edit#gid=177537877"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Variables_Orden').item.json.row_number }}",
+            "estado": "EJECUTADA",
+            "fecha_ejecucion": "={{ $now }}",
+            "precio_operacion": "={{ Number($('API_alphavantage').item.json['Global Quote']['05. price']).toFixed(2) }}\n"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "id_orden",
+              "displayName": "id_orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "user_telegram_id",
+              "displayName": "user_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ticker",
+              "displayName": "ticker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "orden",
+              "displayName": "orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tipo_orden",
+              "displayName": "tipo_orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "precio_objetivo",
+              "displayName": "precio_objetivo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "cantidad",
+              "displayName": "cantidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "precio_operacion",
+              "displayName": "precio_operacion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_creacion",
+              "displayName": "fecha_creacion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "fecha_ejecucion",
+              "displayName": "fecha_ejecucion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -6048,
+        1264
+      ],
+      "id": "d92e7a0b-6e5f-496e-9eaf-d3d27e9e854d",
+      "name": "Orden_Ejecutada",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Variables_Orden').item.json.user_telegram_id }}",
+        "text": "=Se hizo la {{ $('Variables_Orden').item.json.orden }} de {{ $('Variables_Orden').item.json.ticker }} a un precio de {{ $('API_alphavantage').item.json['Global Quote']['05. price'] }} por la cantidad de {{ $('Variables_Orden').item.json.cantidad }} acciones.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -5824,
+        1264
+      ],
+      "id": "106eda85-6eb6-40de-ac36-71eb1c2bdc3e",
+      "name": "Mensaje_Confirmacion",
+      "webhookId": "02579d9c-cca5-491a-b73b-fef516f15047",
+      "credentials": {
+        "telegramApi": {
+          "id": "1RjJxHfCbfVBmEMh",
+          "name": "IA Dis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "15WjZ5f7lV5i9SgwAGDIvIqkDUjEZ_jjYbbAdywtf7Nk",
+          "mode": "list",
+          "cachedResultName": "Transacciones",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15WjZ5f7lV5i9SgwAGDIvIqkDUjEZ_jjYbbAdywtf7Nk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 768739631,
+          "mode": "list",
+          "cachedResultName": "Transacciones",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15WjZ5f7lV5i9SgwAGDIvIqkDUjEZ_jjYbbAdywtf7Nk/edit#gid=768739631"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_orden": "={{ $('Variables_Orden').item.json.id_orden }}",
+            "id_transaccion": "={{ [...Array(36)].map((_, i) =>    'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'[i].replace(/[xy]/, c => {     const r = Math.random() * 16 | 0;     const v = c === 'x' ? r : (r & 0x3 | 0x8);     return v.toString(16);   }) ).join('') }}",
+            "user_telegram_id": "={{ $('Variables_Orden').item.json.user_telegram_id }}",
+            "ticker": "={{ $('Variables_Orden').item.json.ticker }}",
+            "orden": "={{ $('Variables_Orden').item.json.orden }}",
+            "tipo_orden": "={{ $('Variables_Orden').item.json.tipo_orden }}",
+            "precio_ejecucion": "={{ $('API_alphavantage').item.json['Global Quote']['05. price'] }}",
+            "cantidad": "={{ $('Variables_Orden').item.json.cantidad }}",
+            "monto_total": "={{ \n  (\n    Number($('API_alphavantage').item.json['Global Quote']['05. price']) *\n    $('Variables_Orden').item.json.cantidad\n  ).toFixed(2)\n}}\n",
+            "fecha_hora": "={{ $now }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_transaccion",
+              "displayName": "id_transaccion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "id_orden",
+              "displayName": "id_orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "user_telegram_id",
+              "displayName": "user_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ticker",
+              "displayName": "ticker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "orden",
+              "displayName": "orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "tipo_orden",
+              "displayName": "tipo_orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "precio_ejecucion",
+              "displayName": "precio_ejecucion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "cantidad",
+              "displayName": "cantidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "monto_total",
+              "displayName": "monto_total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_hora",
+              "displayName": "fecha_hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -5600,
+        1264
+      ],
+      "id": "5c5ab5a9-f017-401f-bf29-855b57732831",
+      "name": "Crear_Transaccion",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys",
+          "mode": "list",
+          "cachedResultName": "Portfolio",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 321740412,
+          "mode": "list",
+          "cachedResultName": "Portfolio",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys/edit#gid=321740412"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "id_portfolio",
+              "lookupValue": "={{ $('Variables_Orden').item.json.user_telegram_id }}-{{ $('Variables_Orden').item.json.ticker }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -5376,
+        1264
+      ],
+      "id": "a0e3a9f1-cb13-4f54-876f-130b135bc132",
+      "name": "Verificar_Portfolio",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -4032,
+        1360
+      ],
+      "id": "81342175-dd86-4d68-b218-d7d9f6e44f31",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -6048,
+        1600
+      ],
+      "id": "f5736857-b0f4-458b-a457-a26672dca7b3",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY",
+          "mode": "list",
+          "cachedResultName": "Ordenes_Programadas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 177537877,
+          "mode": "list",
+          "cachedResultName": "Ordenes_Programadas",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17esKEOojGqHHBHwU9SCc3_hE8paBJUcOrHrSZg7_3aY/edit#gid=177537877"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "estado",
+              "lookupValue": "PENDIENTE"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -8512,
+        1936
+      ],
+      "id": "f1cbcd96-855b-4cbd-984b-043715d3a38d",
+      "name": "Ordenes_programadas",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a821fc70-93fc-4a7a-acc7-db64ce58546a",
+              "leftValue": "={{ $('Ordenes_programadas').item.json.orden }}",
+              "rightValue": "BUY",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "a0149d4c-203b-48f4-9c36-40e77c39b011",
+              "leftValue": "={{ $('Ordenes_programadas').item.json.tipo_orden }}",
+              "rightValue": "MARKET",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -7392,
+        1408
+      ],
+      "id": "f1f306e8-8c3b-48c9-8985-efa9f6eabedb",
+      "name": "MARKET_BUY"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "aebf57c3-1457-4edc-9e81-f5956729c154",
+              "leftValue": "={{ $('Ordenes_programadas').item.json.orden }}",
+              "rightValue": "SELL",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "0f0cfcbe-c646-47d2-9b2e-cdf6351d12fd",
+              "leftValue": "={{ $('Ordenes_programadas').item.json.tipo_orden }}",
+              "rightValue": "MARKET",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -7168,
+        1504
+      ],
+      "id": "d136b575-f48a-4427-a8bc-f6e9c52d6738",
+      "name": "MARKET_SELL"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0c163816-49c7-4604-b12c-c7faf156bcab",
+              "leftValue": "={{ $('Ordenes_programadas').item.json.orden }}",
+              "rightValue": "BUY",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "27562440-b6ba-42c6-b572-95f956658642",
+              "leftValue": "={{ $('Ordenes_programadas').item.json.tipo_orden }}",
+              "rightValue": "LIMIT",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -6944,
+        1600
+      ],
+      "id": "4ce9f8c4-d9d4-416d-afdc-59995201e327",
+      "name": "LIMIT_BUY"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "259b3098-133a-4a90-9e9a-0463a5689587",
+              "leftValue": "={{ $('Ordenes_programadas').item.json.orden }}",
+              "rightValue": "SELL",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "d3e5eee2-b053-4fc0-acff-1b5a05808434",
+              "leftValue": "={{ $('Ordenes_programadas').item.json.tipo_orden }}",
+              "rightValue": "LIMIT",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -6720,
+        1696
+      ],
+      "id": "c245a121-a550-42fd-954a-50e3d76ba16d",
+      "name": "LIMIT_SELL"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e8cc1dee-656f-4651-ae5d-a7b2b7ed7d35",
+              "leftValue": "={{ $('Variables_Orden').item.json.orden }}",
+              "rightValue": "BUY",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -5152,
+        1264
+      ],
+      "id": "69d97d14-91d4-4d1b-b87b-663a6c5dc271",
+      "name": "BUY?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1aff2746-3230-4e2d-ba4d-e44de76c36b2",
+              "leftValue": "={{ $('Verificar_Portfolio').item.json.row_number }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -4928,
+        1024
+      ],
+      "id": "d0b5de20-8f29-44ca-9db5-8fb577115998",
+      "name": "PORTFOLIO_EXISTE?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1aff2746-3230-4e2d-ba4d-e44de76c36b2",
+              "leftValue": "={{ $('Verificar_Portfolio').item.json.row_number }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -4928,
+        1504
+      ],
+      "id": "1b2a3d70-20e1-4571-825f-364b2b52a944",
+      "name": "PORTFOLIO_EXISTE?1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9550c7a8-701a-4a85-9721-c5dc6c009b9b",
+              "leftValue": "={{ $('Variables_Orden').item.json.precio_objetivo }}",
+              "rightValue": "={{ $('API_alphavantage').item.json['Global Quote']['05. price'].toNumber() }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -6272,
+        1408
+      ],
+      "id": "942e0043-9e83-4fc1-89a2-022129194887",
+      "name": "PRECIO_MAYOR"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1c2c7343-bed6-4964-b633-723bdc1ca4a9",
+              "leftValue": "={{ $('Variables_Orden').item.json.precio_objetivo }}",
+              "rightValue": "={{ $('API_alphavantage').item.json['Global Quote']['05. price'].toNumber() }}",
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -6272,
+        1600
+      ],
+      "id": "2c3851d9-fa38-467b-8062-b357a4599b06",
+      "name": "PRECIO_MENOR"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys",
+          "mode": "list",
+          "cachedResultName": "Portfolio",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 321740412,
+          "mode": "list",
+          "cachedResultName": "Portfolio",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys/edit#gid=321740412"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_portfolio": "={{ $('Variables_Orden').item.json.user_telegram_id }}-{{ $('Variables_Orden').item.json.ticker }}",
+            "cantidad_total": "={{ $('Verificar_Portfolio').item.json.cantidad_total + $('Variables_Orden').item.json.cantidad}}"
+          },
+          "matchingColumns": [
+            "id_portfolio"
+          ],
+          "schema": [
+            {
+              "id": "id_portfolio",
+              "displayName": "id_portfolio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "user_telegram_id",
+              "displayName": "user_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ticker",
+              "displayName": "ticker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "cantidad_total",
+              "displayName": "cantidad_total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4704,
+        928
+      ],
+      "id": "d25cf589-8b5a-4e26-8fc2-b3e0ecb71fe0",
+      "name": "ACTUALIZAR_CANTIDAD",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys",
+          "mode": "list",
+          "cachedResultName": "Portfolio",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 321740412,
+          "mode": "list",
+          "cachedResultName": "Portfolio",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys/edit#gid=321740412"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_portfolio": "={{ $('Variables_Orden').item.json.user_telegram_id }}-{{ $('Variables_Orden').item.json.ticker }}",
+            "user_telegram_id": "={{ $('Variables_Orden').item.json.user_telegram_id }}",
+            "ticker": "={{ $('Variables_Orden').item.json.ticker }}",
+            "cantidad_total": "={{ $('Variables_Orden').item.json.cantidad }}"
+          },
+          "matchingColumns": [
+            "id_portfolio"
+          ],
+          "schema": [
+            {
+              "id": "id_portfolio",
+              "displayName": "id_portfolio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "user_telegram_id",
+              "displayName": "user_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ticker",
+              "displayName": "ticker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "cantidad_total",
+              "displayName": "cantidad_total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4704,
+        1216
+      ],
+      "id": "dbbdf848-b214-43a9-9f3a-3bd9841119db",
+      "name": "ACTUALIZAR_CANTIDAD1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys",
+          "mode": "list",
+          "cachedResultName": "Portfolio",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 321740412,
+          "mode": "list",
+          "cachedResultName": "Portfolio",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys/edit#gid=321740412"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_portfolio": "={{ $('Variables_Orden').item.json.user_telegram_id }}-{{ $('Variables_Orden').item.json.ticker }}",
+            "cantidad_total": "={{ $('Verificar_Portfolio').item.json.cantidad_total - $('Variables_Orden').item.json.cantidad}}"
+          },
+          "matchingColumns": [
+            "id_portfolio"
+          ],
+          "schema": [
+            {
+              "id": "id_portfolio",
+              "displayName": "id_portfolio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "user_telegram_id",
+              "displayName": "user_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ticker",
+              "displayName": "ticker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "cantidad_total",
+              "displayName": "cantidad_total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4704,
+        1408
+      ],
+      "id": "eab8aa6f-bbc9-47e3-bf8d-f8900bfac2c1",
+      "name": "ACTUALIZAR_CANTIDAD2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys",
+          "mode": "list",
+          "cachedResultName": "Portfolio",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 321740412,
+          "mode": "list",
+          "cachedResultName": "Portfolio",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1meiXpmjdJssddu-lAG-P8z6xzLTij1VX5ftpWXjmGys/edit#gid=321740412"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_portfolio": "={{ $('Variables_Orden').item.json.user_telegram_id }}-{{ $('Variables_Orden').item.json.ticker }}",
+            "user_telegram_id": "={{ $('Variables_Orden').item.json.user_telegram_id }}",
+            "ticker": "={{ $('Variables_Orden').item.json.ticker }}",
+            "cantidad_total": "={{ -$('Variables_Orden').item.json.cantidad }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_portfolio",
+              "displayName": "id_portfolio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "user_telegram_id",
+              "displayName": "user_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ticker",
+              "displayName": "ticker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "cantidad_total",
+              "displayName": "cantidad_total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4704,
+        1600
+      ],
+      "id": "b0db1353-307c-4651-8a41-73b8fb7d157b",
+      "name": "ACTUALIZAR_CANTIDAD3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4",
+          "mode": "list",
+          "cachedResultName": "Usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1727394368,
+          "mode": "list",
+          "cachedResultName": "Usuario",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit#gid=1727394368"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "user_telegram_id",
+              "lookupValue": "={{ $('Variables_Orden').item.json.user_telegram_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4480,
+        928
+      ],
+      "id": "e5b1c810-4036-416d-b8a3-dbda60ad35fe",
+      "name": "USUARIO_ID",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4",
+          "mode": "list",
+          "cachedResultName": "Usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1727394368,
+          "mode": "list",
+          "cachedResultName": "Usuario",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit#gid=1727394368"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "user_telegram_id",
+              "lookupValue": "={{ $('Variables_Orden').item.json.user_telegram_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4480,
+        1216
+      ],
+      "id": "ae56885f-077b-4054-a48f-a53fe1f15133",
+      "name": "USUARIO_ID1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4",
+          "mode": "list",
+          "cachedResultName": "Usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1727394368,
+          "mode": "list",
+          "cachedResultName": "Usuario",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit#gid=1727394368"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "user_telegram_id",
+              "lookupValue": "={{ $('Variables_Orden').item.json.user_telegram_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4480,
+        1408
+      ],
+      "id": "198eebf9-59da-411d-b933-8316eb616c9b",
+      "name": "USUARIO_ID2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4",
+          "mode": "list",
+          "cachedResultName": "Usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1727394368,
+          "mode": "list",
+          "cachedResultName": "Usuario",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit#gid=1727394368"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "user_telegram_id",
+              "lookupValue": "={{ $('Variables_Orden').item.json.user_telegram_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4480,
+        1600
+      ],
+      "id": "88c1c633-25ef-4a22-88d4-0c155ad13c51",
+      "name": "USUARIO_ID3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4",
+          "mode": "list",
+          "cachedResultName": "Usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1727394368,
+          "mode": "list",
+          "cachedResultName": "Usuario",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit#gid=1727394368"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "user_telegram_id": "={{ $('Variables_Orden').item.json.user_telegram_id }}",
+            "saldo_disponible": "={{ $json.saldo_disponible - $('Crear_Transaccion').item.json.monto_total}}"
+          },
+          "matchingColumns": [
+            "user_telegram_id"
+          ],
+          "schema": [
+            {
+              "id": "user_telegram_id",
+              "displayName": "user_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nombre_usuario",
+              "displayName": "nombre_usuario",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "saldo_disponible",
+              "displayName": "saldo_disponible",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_registro",
+              "displayName": "fecha_registro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4256,
+        928
+      ],
+      "id": "a2f34b7f-d4a2-4098-a934-2c6705ac0858",
+      "name": "ACTUALIZAR_DINERO",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4",
+          "mode": "list",
+          "cachedResultName": "Usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1727394368,
+          "mode": "list",
+          "cachedResultName": "Usuario",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit#gid=1727394368"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "user_telegram_id": "={{ $('Variables_Orden').item.json.user_telegram_id }}",
+            "saldo_disponible": "={{ $json.saldo_disponible - $('Crear_Transaccion').item.json.monto_total}}"
+          },
+          "matchingColumns": [
+            "user_telegram_id"
+          ],
+          "schema": [
+            {
+              "id": "user_telegram_id",
+              "displayName": "user_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nombre_usuario",
+              "displayName": "nombre_usuario",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "saldo_disponible",
+              "displayName": "saldo_disponible",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_registro",
+              "displayName": "fecha_registro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4256,
+        1216
+      ],
+      "id": "194710a1-931b-442f-b429-6f4f22a56168",
+      "name": "ACTUALIZAR_DINERO1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4",
+          "mode": "list",
+          "cachedResultName": "Usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1727394368,
+          "mode": "list",
+          "cachedResultName": "Usuario",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit#gid=1727394368"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "user_telegram_id": "={{ $('Variables_Orden').item.json.user_telegram_id }}",
+            "saldo_disponible": "={{ $json.saldo_disponible + $('Crear_Transaccion').item.json.monto_total.toNumber()}}"
+          },
+          "matchingColumns": [
+            "user_telegram_id"
+          ],
+          "schema": [
+            {
+              "id": "user_telegram_id",
+              "displayName": "user_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nombre_usuario",
+              "displayName": "nombre_usuario",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "saldo_disponible",
+              "displayName": "saldo_disponible",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_registro",
+              "displayName": "fecha_registro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4256,
+        1408
+      ],
+      "id": "06f450d3-fe54-473b-9fe3-de524205bac7",
+      "name": "ACTUALIZAR_DINERO2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4",
+          "mode": "list",
+          "cachedResultName": "Usuarios",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1727394368,
+          "mode": "list",
+          "cachedResultName": "Usuario",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1c9XiuYCzUya2mGU-1T7iS3ODlUIuZefIcfIfmwZTmP4/edit#gid=1727394368"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "user_telegram_id": "={{ $('Variables_Orden').item.json.user_telegram_id }}",
+            "saldo_disponible": "={{ $json.saldo_disponible + $('Crear_Transaccion').item.json.monto_total}}"
+          },
+          "matchingColumns": [
+            "user_telegram_id"
+          ],
+          "schema": [
+            {
+              "id": "user_telegram_id",
+              "displayName": "user_telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nombre_usuario",
+              "displayName": "nombre_usuario",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "saldo_disponible",
+              "displayName": "saldo_disponible",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_registro",
+              "displayName": "fecha_registro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4256,
+        1600
+      ],
+      "id": "278fe076-d7a0-4527-a03c-0bafd9e3982b",
+      "name": "ACTUALIZAR_DINERO3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HHD6iLSams04qhIO",
+          "name": "lavalle"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Variables_Orden": {
+      "main": [
+        [
+          {
+            "node": "Espera_3s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Espera_3s": {
+      "main": [
+        [
+          {
+            "node": "API_alphavantage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger_1m": {
+      "main": [
+        [
+          {
+            "node": "Ordenes_programadas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop_Over_Ordenes": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Variables_Orden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API_alphavantage": {
+      "main": [
+        [
+          {
+            "node": "MARKET_BUY",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BUY_MARKET": {
+      "main": [
+        [
+          {
+            "node": "Orden_Ejecutada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SELL_LIMIT": {
+      "main": [
+        [
+          {
+            "node": "PRECIO_MENOR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BUY_LIMIT": {
+      "main": [
+        [
+          {
+            "node": "PRECIO_MAYOR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SELL_MARKET": {
+      "main": [
+        [
+          {
+            "node": "Orden_Ejecutada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Orden_Ejecutada": {
+      "main": [
+        [
+          {
+            "node": "Mensaje_Confirmacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensaje_Confirmacion": {
+      "main": [
+        [
+          {
+            "node": "Crear_Transaccion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear_Transaccion": {
+      "main": [
+        [
+          {
+            "node": "Verificar_Portfolio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar_Portfolio": {
+      "main": [
+        [
+          {
+            "node": "BUY?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "Loop_Over_Ordenes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing1": {
+      "main": [
+        [
+          {
+            "node": "Loop_Over_Ordenes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ordenes_programadas": {
+      "main": [
+        [
+          {
+            "node": "Loop_Over_Ordenes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MARKET_BUY": {
+      "main": [
+        [
+          {
+            "node": "BUY_MARKET",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MARKET_SELL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MARKET_SELL": {
+      "main": [
+        [
+          {
+            "node": "SELL_MARKET",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LIMIT_BUY",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LIMIT_BUY": {
+      "main": [
+        [
+          {
+            "node": "BUY_LIMIT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LIMIT_SELL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LIMIT_SELL": {
+      "main": [
+        [
+          {
+            "node": "SELL_LIMIT",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BUY?": {
+      "main": [
+        [
+          {
+            "node": "PORTFOLIO_EXISTE?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PORTFOLIO_EXISTE?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PORTFOLIO_EXISTE?": {
+      "main": [
+        [
+          {
+            "node": "ACTUALIZAR_CANTIDAD",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ACTUALIZAR_CANTIDAD1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PORTFOLIO_EXISTE?1": {
+      "main": [
+        [
+          {
+            "node": "ACTUALIZAR_CANTIDAD2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ACTUALIZAR_CANTIDAD3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PRECIO_MAYOR": {
+      "main": [
+        [
+          {
+            "node": "Orden_Ejecutada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PRECIO_MENOR": {
+      "main": [
+        [
+          {
+            "node": "Orden_Ejecutada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ACTUALIZAR_CANTIDAD": {
+      "main": [
+        [
+          {
+            "node": "USUARIO_ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ACTUALIZAR_CANTIDAD1": {
+      "main": [
+        [
+          {
+            "node": "USUARIO_ID1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ACTUALIZAR_CANTIDAD2": {
+      "main": [
+        [
+          {
+            "node": "USUARIO_ID2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ACTUALIZAR_CANTIDAD3": {
+      "main": [
+        [
+          {
+            "node": "USUARIO_ID3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "USUARIO_ID": {
+      "main": [
+        [
+          {
+            "node": "ACTUALIZAR_DINERO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "USUARIO_ID1": {
+      "main": [
+        [
+          {
+            "node": "ACTUALIZAR_DINERO1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "USUARIO_ID2": {
+      "main": [
+        [
+          {
+            "node": "ACTUALIZAR_DINERO2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "USUARIO_ID3": {
+      "main": [
+        [
+          {
+            "node": "ACTUALIZAR_DINERO3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ACTUALIZAR_DINERO": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ACTUALIZAR_DINERO1": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ACTUALIZAR_DINERO2": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ACTUALIZAR_DINERO3": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message2": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1aaa01d1-b9b6-48f0-9107-03ab29381b62",
+  "meta": {
+    "instanceId": "99dea714450516e2019d8d8452140777f1b74fce288de8785b7c104e37169184"
+  },
+  "id": "5iVWWOTVyRXNkqEJ",
+  "tags": []
+}
